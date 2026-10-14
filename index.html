@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MOBA Draft Simulator</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header>
+      <h2>MOBA Draft Simulator</h2>
+      <div class="status-panel">
+        <div id="phaseBadge" class="phase-badge blue">블루팀 턴</div>
+        <div id="statusTitle" class="status-title">챔피언을 밴해주세요</div>
+      </div>
+      <button id="resetBtn" class="reset-btn">처음부터 다시</button>
+    </header>
+
+    <div class="main-container">
+      <!-- 블루팀 패널 -->
+      <div class="team-col blue-side">
+        <div class="team-header">BLUE TEAM</div>
+        <div class="ban-bar">
+          <div class="ban-slot" id="blue-ban-0">?</div>
+          <div class="ban-slot" id="blue-ban-1">?</div>
+          <div class="ban-slot" id="blue-ban-2">?</div>
+          <div class="ban-slot" id="blue-ban-3">?</div>
+          <div class="ban-slot" id="blue-ban-4">?</div>
+        </div>
+
+        <div class="pick-list">
+          <!-- TOP -->
+          <div class="pick-row">
+            <div class="pos-label">TOP</div>
+            <div class="pick-slot" id="blue-pick-0">
+              <div class="slot-icon">?</div>
+              <div class="slot-info">
+                <h4>1픽</h4>
+                <p>선택 대기</p>
+              </div>
+            </div>
+          </div>
+          <!-- JGL -->
+          <div class="pick-row">
+            <div class="pos-label">JGL</div>
+            <div class="pick-slot" id="blue-pick-1">
+              <div class="slot-icon">?</div>
+              <div class="slot-info">
+                <h4>2픽</h4>
+                <p>선택 대기</p>
+              </div>
+            </div>
+          </div>
+          <!-- MID -->
+          <div class="pick-row">
+            <div class="pos-label">MID</div>
+            <div class="pick-slot" id="blue-pick-2">
+              <div class="slot-icon">?</div>
+              <div class="slot-info">
+                <h4>3픽</h4>
+                <p>선택 대기</p>
+              </div>
+            </div>
+          </div>
+          <!-- BOT -->
+          <div class="pick-row">
+            <div class="pos-label">BOT</div>
+            <div class="pick-slot" id="blue-pick-3">
+              <div class="slot-icon">?</div>
+              <div class="slot-info">
+                <h4>4픽</h4>
+                <p>선택 대기</p>
+              </div>
+            </div>
+          </div>
+          <!-- SUP -->
+          <div class="pick-row">
+            <div class="pos-label">SUP</div>
+            <div class="pick-slot" id="blue-pick-4">
+              <div class="slot-icon">?</div>
+              <div class="slot-info">
+                <h4>5픽</h4>
+                <p>선택 대기</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 중앙 챔피언 그리드 및 상세 정보 영역 -->
+      <div class="center-col">
+        <!-- 컨트롤 바 (포지션 - 전투역할군 - 전투방식 - 파워커브 - 티어 순서) -->
+        <div class="controls-bar">
+          <div class="dropdown-filter-group">
+            <!-- 1. 포지션 -->
+            <div class="filter-item">
+              <label for="posSelect">포지션</label>
+              <select id="posSelect" class="filter-select">
+                <option value="전체">전체</option>
+                <option value="탑레이너">탑레이너</option>
+                <option value="정글러">정글러</option>
+                <option value="미드레이너">미드레이너</option>
+                <option value="바텀레이너">바텀레이너</option>
+                <option value="서포터">서포터</option>
+              </select>
+            </div>
+
+            <!-- 2. 전투역할군 -->
+            <div class="filter-item">
+              <label for="roleSelect">전투역할군</label>
+              <select id="roleSelect" class="filter-select">
+                <option value="전체">전체</option>
+                <option value="탱커">탱커</option>
+                <option value="물리딜러">물리딜러</option>
+                <option value="마법딜러">마법딜러</option>
+                <option value="버퍼">버퍼</option>
+                <option value="디버퍼">디버퍼</option>
+              </select>
+            </div>
+
+            <!-- 3. 전투방식 -->
+            <div class="filter-item">
+              <label for="styleSelect">전투방식</label>
+              <select id="styleSelect" class="filter-select">
+                <option value="전체">전체</option>
+                <option value="정석방식">정석방식</option>
+                <option value="견제방식">견제방식</option>
+                <option value="돌진방식">돌진방식</option>
+                <option value="유동적방식">유동적방식</option>
+              </select>
+            </div>
+
+            <!-- 4. 파워커브 -->
+            <div class="filter-item">
+              <label for="curveSelect">파워커브</label>
+              <select id="curveSelect" class="filter-select">
+                <option value="전체">전체</option>
+                <option value="초반강력">초반강력</option>
+                <option value="중반강력">중반강력</option>
+                <option value="중반정체">중반정체</option>
+                <option value="후반강력">후반강력</option>
+                <option value="안전지속">안전지속</option>
+              </select>
+            </div>
+
+            <!-- 5. 티어 -->
+            <div class="filter-item">
+              <label for="tierSelect">티어</label>
+              <select id="tierSelect" class="filter-select">
+                <option value="전체">전체</option>
+                <option value="S">S티어</option>
+                <option value="A">A티어</option>
+                <option value="B">B티어</option>
+                <option value="C">C티어</option>
+                <option value="D">D티어</option>
+              </select>
+            </div>
+
+            <!-- 필터 초기화 버튼 -->
+            <button
+              id="clearFiltersBtn"
+              class="clear-filters-btn"
+              title="필터 초기화"
+            >
+              🔄
+            </button>
+          </div>
+
+          <div class="controls-right">
+            <input
+              type="text"
+              id="searchInput"
+              class="search-input"
+              placeholder="챔피언 검색..."
+            />
+            <button id="confirmBtn" class="confirm-btn" disabled>
+              선택 완료
+            </button>
+          </div>
+        </div>
+
+        <!-- 챔피언 선택 카드 그리드 -->
+        <div class="champion-grid" id="championGrid"></div>
+
+        <!-- 하단 챔피언 상세 정보 패널 (Vertical Tabs UI) -->
+        <div class="detail-panel" id="detailPanel">
+          <div class="detail-header">
+            <div class="champion-detail-row">
+              <div class="champ-identity">
+                <img
+                  id="detailTierIcon"
+                  class="detail-tier-img"
+                  src="./portraits/Qtier.png"
+                  alt="티어"
+                />
+                <span id="detailChampName" class="detail-champ-name">[이름]</span>
+              </div>
+              <div class="detail-category-box">
+                <span class="category-label">포지션</span>
+                <div class="category-chips" id="detailPosChips"></div>
+              </div>
+              <div class="detail-category-box">
+                <span class="category-label">역할군</span>
+                <div class="category-chips" id="detailRoleChips"></div>
+              </div>
+              <div class="detail-category-box">
+                <span class="category-label">전투방식</span>
+                <div class="category-chips" id="detailStyleChips"></div>
+              </div>
+              <div class="detail-category-box">
+                <span class="category-label">파워커브</span>
+                <div class="category-chips" id="detailCurveChips"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 탭 UI 메인 컨테이너 -->
+          <div class="detail-main">
+            <!-- 좌측: 파일첩 수직 탭 버튼 목록 -->
+            <div class="detail-tabs">
+              <button class="tab-btn active" data-tab="tabRole">
+                전투역할군
+              </button>
+              <button class="tab-btn" data-tab="tabStyle">전투방식</button>
+              <button class="tab-btn" data-tab="tabCurve">파워커브</button>
+            </div>
+
+            <!-- 우측: 탭별 콘텐츠 패널 -->
+            <div class="detail-content">
+              <!-- 1. 전투역할군 탭 -->
+              <div class="tab-pane active" id="tabRole">
+                <div class="detail-body">
+                  <!-- 블루팀 역할군 파이차트 -->
+                  <div class="role-chart-box blue-box">
+                    <div class="chart-header">
+                      <span class="team-tag blue">BLUE</span>
+                      <span class="chart-title">전투역할군 구성</span>
+                    </div>
+                    <div class="chart-content">
+                      <svg
+                        id="blueRolePie"
+                        class="pie-svg"
+                        viewBox="-150 -110 300 240"
+                      ></svg>
+                      <div id="blueRoleLegend" class="legend-list"></div>
+                    </div>
+                  </div>
+
+                  <!-- 레드팀 역할군 파이차트 -->
+                  <div class="role-chart-box red-box">
+                    <div class="chart-header">
+                      <span class="team-tag red">RED</span>
+                      <span class="chart-title">전투역할군 구성</span>
+                    </div>
+                    <div class="chart-content">
+                      <svg
+                        id="redRolePie"
+                        class="pie-svg"
+                        viewBox="-150 -110 300 240"
+                      ></svg>
+                      <div id="redRoleLegend" class="legend-list"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2. 전투방식 탭 (구현 완료) -->
+              <div class="tab-pane" id="tabStyle">
+                <div class="detail-body">
+                  <!-- 블루팀 전투방식 파이차트 -->
+                  <div class="role-chart-box blue-box">
+                    <div class="chart-header">
+                      <span class="team-tag blue">BLUE</span>
+                      <span class="chart-title">전투방식 구성</span>
+                    </div>
+                    <div class="chart-content">
+                      <svg
+                        id="blueStylePie"
+                        class="pie-svg"
+                        viewBox="-150 -110 300 240"
+                      ></svg>
+                      <div id="blueStyleLegend" class="legend-list"></div>
+                    </div>
+                  </div>
+
+                  <!-- 레드팀 전투방식 파이차트 -->
+                  <div class="role-chart-box red-box">
+                    <div class="chart-header">
+                      <span class="team-tag red">RED</span>
+                      <span class="chart-title">전투방식 구성</span>
+                    </div>
+                    <div class="chart-content">
+                      <svg
+                        id="redStylePie"
+                        class="pie-svg"
+                        viewBox="-150 -110 300 240"
+                      ></svg>
+                      <div id="redStyleLegend" class="legend-list"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3. 파워커브 탭 (단일 통합 비교 꺾은선 차트) -->
+              <div class="tab-pane" id="tabCurve">
+                <div class="curve-container">
+                  <div class="curve-chart-box">
+                    <div class="curve-chart-header">
+                      <div class="curve-title-wrap">
+                        <span class="chart-title">팀별 시간대 화력 추이</span>
+                        <span class="curve-subtext">평균 점수 (1.5 ~ 4.5)</span>
+                      </div>
+                      <div class="curve-legend-tags">
+                        <div class="curve-tag-item">
+                          <span class="curve-tag-line blue"></span>
+                          <span class="curve-tag-label">블루팀</span>
+                        </div>
+                        <div class="curve-tag-item">
+                          <span class="curve-tag-line red"></span>
+                          <span class="curve-tag-label">레드팀</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="curve-chart-content">
+                      <svg
+                        id="powerCurveLineChart"
+                        class="curve-svg"
+                        viewBox="0 0 600 200"
+                      ></svg>
+                    </div>
+                  </div>
+                  <!-- 우측: 시간대별 상세 수치 카드 요약 -->
+                  <div class="curve-summary-box" id="curveSummaryBox"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 레드팀 패널 -->
+      <div class="team-col red-side">
+        <div class="team-header">RED TEAM</div>
+        <div class="ban-bar">
+          <div class="ban-slot" id="red-ban-0">?</div>
+          <div class="ban-slot" id="red-ban-1">?</div>
+          <div class="ban-slot" id="red-ban-2">?</div>
+          <div class="ban-slot" id="red-ban-3">?</div>
+          <div class="ban-slot" id="red-ban-4">?</div>
+        </div>
+
+        <div class="pick-list">
+          <!-- TOP -->
+          <div class="pick-row">
+            <div class="pick-slot" id="red-pick-0">
+              <div class="slot-icon">?</div>
+              <div class="slot-info">
+                <h4>1픽</h4>
+                <p>선택 대기</p>
+              </div>
+            </div>
+            <div class="pos-label">TOP</div>
+          </div>
+          <!-- JGL -->
+          <div class="pick-row">
+            <div class="pick-slot" id="red-pick-1">
+              <div class="slot-icon">?</div>
+              <div class="slot-info">
+                <h4>2픽</h4>
+                <p>선택 대기</p>
+              </div>
+            </div>
+            <div class="pos-label">JGL</div>
+          </div>
+          <!-- MID -->
+          <div class="pick-row">
+            <div class="pick-slot" id="red-pick-2">
+              <div class="slot-icon">?</div>
+              <div class="slot-info">
+                <h4>3픽</h4>
+                <p>선택 대기</p>
+              </div>
+            </div>
+            <div class="pos-label">MID</div>
+          </div>
+          <!-- BOT -->
+          <div class="pick-row">
+            <div class="pick-slot" id="red-pick-3">
+              <div class="slot-icon">?</div>
+              <div class="slot-info">
+                <h4>4픽</h4>
+                <p>선택 대기</p>
+              </div>
+            </div>
+            <div class="pos-label">BOT</div>
+          </div>
+          <!-- SUP -->
+          <div class="pick-row">
+            <div class="pick-slot" id="red-pick-4">
+              <div class="slot-icon">?</div>
+              <div class="slot-info">
+                <h4>5픽</h4>
+                <p>선택 대기</p>
+              </div>
+            </div>
+            <div class="pos-label">SUP</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./js/app.js"></script>
+  </body>
+</html>
